@@ -49,6 +49,7 @@
       "require": "./lib/postcss.js"
     },
     "./lib/at-rule": "./lib/at-rule.js",
+    "./lib/cascade-layers": "./lib/cascade-layers.js",
     "./lib/comment": "./lib/comment.js",
     "./lib/container": "./lib/container.js",
     "./lib/css-syntax-error": "./lib/css-syntax-error.js",
