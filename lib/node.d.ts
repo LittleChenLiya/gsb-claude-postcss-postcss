@@ -6,6 +6,7 @@ import CssSyntaxError from './css-syntax-error.js'
 import Declaration, { DeclarationProps } from './declaration.js'
 import Document from './document.js'
 import Input from './input.js'
+import LayerAnalyzer = require('./layer-analyzer.js')
 import { Stringifier, Syntax } from './postcss.js'
 import Result from './result.js'
 import Root from './root.js'
@@ -263,6 +264,20 @@ declare abstract class Node_ {
   after(
     newNode: Node | Node.ChildProps | readonly Node[] | string | undefined
   ): this
+
+  /**
+   * Analyzes the cascade layers of the root containing this node.
+   * It does not modify the tree.
+   *
+   * ```js
+   * const analysis = decl.analyzeLayers()
+   * analysis.important.map(entry => entry.type) // important layer order
+   * ```
+   *
+   * @param options Import resolver and condition resolution.
+   * @return Layer order for normal and important declarations.
+   */
+  analyzeLayers(options?: LayerAnalyzer.Options): LayerAnalyzer.Result
 
   /**
    * It assigns properties to an existing node instance.

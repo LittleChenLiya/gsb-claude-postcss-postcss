@@ -1,6 +1,7 @@
 import AtRule from './at-rule.js'
 import Comment from './comment.js'
 import Declaration from './declaration.js'
+import LayerAnalyzer = require('./layer-analyzer.js')
 import Node, { ChildNode, ChildProps, NodeProps } from './node.js'
 import { Root } from './postcss.js'
 import Rule from './rule.js'
@@ -80,6 +81,20 @@ declare abstract class Container_<Child extends Node = ChildNode> extends Node {
    */
   get last(): Child | undefined
   /**
+   * Analyzes the cascade layers declared in this container (and,
+   * optionally, in stylesheets pulled in through an import resolver).
+   * It does not modify the tree.
+   *
+   * ```js
+   * const analysis = root.analyzeLayers()
+   * analysis.normal.map(entry => entry.type) // layer order by priority
+   * ```
+   *
+   * @param options Import resolver and condition resolution.
+   * @return Layer order for normal and important declarations.
+   */
+  analyzeLayers(options?: LayerAnalyzer.Options): LayerAnalyzer.Result
+  /**
    * Inserts new nodes to the end of the container.
    *
    * ```js
@@ -101,11 +116,13 @@ declare abstract class Container_<Child extends Node = ChildNode> extends Node {
    */
   append(...nodes: Container.NewChild[]): this
   assign(overrides: Container.ContainerProps | object): this
+
   clone(overrides?: Partial<Container.ContainerProps>): this
 
   cloneAfter(overrides?: Partial<Container.ContainerProps>): this
 
   cloneBefore(overrides?: Partial<Container.ContainerProps>): this
+
   /**
    * Iterates through the container’s immediate children,
    * calling `callback` for each child.

@@ -57,6 +57,7 @@
     "./lib/input": "./lib/input.js",
     "./lib/lazy-result": "./lib/lazy-result.js",
     "./lib/no-work-result": "./lib/no-work-result.js",
+    "./lib/layer-analyzer": "./lib/layer-analyzer.js",
     "./lib/list": "./lib/list.js",
     "./lib/map-generator": "./lib/map-generator.js",
     "./lib/node": "./lib/node.js",
@@ -127,7 +128,7 @@
   "size-limit": [
     {
       "path": "lib/postcss.js",
-      "limit": "16.5 KB"
+      "limit": "17.5 KB"
     }
   ],
   "c8": {
