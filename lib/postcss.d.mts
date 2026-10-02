@@ -17,6 +17,7 @@ export {
   decl,
   Declaration,
   DeclarationProps,
+  dedupeDeclarations,
   // postcss function / namespace
   default,
   document,

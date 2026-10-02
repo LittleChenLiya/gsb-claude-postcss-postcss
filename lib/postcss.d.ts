@@ -5,6 +5,7 @@ import Comment, { CommentProps } from './comment.js'
 import Container, { ContainerProps, NewChild } from './container.js'
 import CssSyntaxError from './css-syntax-error.js'
 import Declaration, { DeclarationProps } from './declaration.js'
+import dedupeDeclarations from './dedupe-declarations.js'
 import Document, { DocumentProps } from './document.js'
 import Input, { FilePosition } from './input.js'
 import LazyResult from './lazy-result.js'
@@ -163,6 +164,7 @@ declare namespace postcss {
     CssSyntaxError,
     Declaration,
     DeclarationProps,
+    dedupeDeclarations,
     Document,
     DocumentProps,
     FilePosition,
