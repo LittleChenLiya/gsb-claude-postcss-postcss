@@ -5,6 +5,7 @@
   - [Workflow](https://github.com/postcss/postcss/blob/main/docs/architecture.md#workflow)
   - [Core Structures](https://github.com/postcss/postcss/blob/main/docs/architecture.md#core-structures)
   - [API Reference](https://github.com/postcss/postcss/blob/main/docs/architecture.md#api-reference)
+- [Processing Snapshots](https://github.com/postcss/postcss/blob/main/docs/snapshots.md#processing-snapshots)
 - [PostCSS Plugins](https://github.com/postcss/postcss/blob/main/docs/plugins.md#postcss-plugins)
   - [Control](https://github.com/postcss/postcss/blob/main/docs/plugins.md#control)
   - [Packs](https://github.com/postcss/postcss/blob/main/docs/plugins.md#packs)

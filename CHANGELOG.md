@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+- Added `LazyResult#snapshot()` and `Result#snapshot()` to observe
+  in-flight processing (`pending`/`running`/`succeeded`/`failed`) together
+  with the warnings produced so far, without starting processing,
+  awaiting plugins, or exposing the AST.
+
 ## 8.5.28
 
 - Fixes types regression.

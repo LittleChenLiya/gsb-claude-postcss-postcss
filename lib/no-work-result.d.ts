@@ -35,6 +35,7 @@ declare class NoWorkResult_ implements LazyResult<Root> {
   get [Symbol.toStringTag](): string
   constructor(processor: Processor, css: string, opts: ResultOptions)
   async(): Promise<Result<Root>>
+  snapshot(): LazyResult.ProcessingSnapshot
   sync(): Result<Root>
   toString(): string
   warnings(): Warning[]

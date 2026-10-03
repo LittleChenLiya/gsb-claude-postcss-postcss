@@ -1,11 +1,72 @@
 import Document from './document.js'
 import { SourceMap } from './postcss.js'
 import Processor from './processor.js'
-import Result, { Message, ResultOptions } from './result.js'
+import Result, { Message, ResultOptions, WarningSnapshot } from './result.js'
 import Root from './root.js'
 import Warning from './warning.js'
 
 declare namespace LazyResult {
+  /**
+   * Safe, serializable fields of an error that failed a processing run.
+   * Never contains the AST node the error was raised on.
+   */
+  export interface ErrorSnapshot {
+    /**
+     * Error message.
+     */
+    message: string
+
+    /**
+     * Error class name (e.g., `CssSyntaxError`).
+     */
+    name: string
+
+    /**
+     * Name of the plugin that threw the error, or `null` if unknown.
+     */
+    plugin: string | null
+  }
+
+  /**
+   * A point-in-time, detached view of a `LazyResult` processing run.
+   *
+   * Reading a snapshot never starts processing, never awaits in-flight
+   * plugins, and never calls plugin code. The object and all nested
+   * containers are fresh copies: mutating them does not affect the run.
+   */
+  export interface ProcessingSnapshot {
+    /**
+     * Safe error fields when `state` is `'failed'`, otherwise `null`.
+     */
+    error: ErrorSnapshot | null
+
+    /**
+     * Number of plugins that have already finished.
+     */
+    pluginsRun: number
+
+    /**
+     * Total number of plugins in the processor for this run.
+     */
+    pluginsTotal: number
+
+    /**
+     * Current stage of the run:
+     *
+     * * `'pending'` — processing has not started yet.
+     * * `'running'` — processing started and is waiting for async plugins.
+     * * `'succeeded'` — all plugins finished without an error.
+     * * `'failed'` — a plugin or the parser threw an error.
+     */
+    state: 'failed' | 'pending' | 'running' | 'succeeded'
+
+    /**
+     * Warnings produced so far, in the order they were added.
+     * Kept even when the run failed.
+     */
+    warnings: WarningSnapshot[]
+  }
+
   export { LazyResult_ as default }
 }
 
@@ -154,6 +215,28 @@ declare class LazyResult_<RootNode = Document | Root> implements PromiseLike<
    * @return Result with output content.
    */
   async(): Promise<Result<RootNode>>
+
+  /**
+   * Returns a detached snapshot of the current processing stage without
+   * starting processing, awaiting in-flight plugins, or calling any plugin.
+   *
+   * ```js
+   * const lazy = postcss(plugins).process(css, { from: cssPath })
+   * lazy.snapshot().state //=> 'pending'
+   * const promise = lazy.then(result => {
+   *   result.snapshot().state //=> 'succeeded'
+   * })
+   * lazy.snapshot().state //=> 'running'
+   * ```
+   *
+   * The snapshot contains the stage (`pending`/`running`/`succeeded`/`failed`),
+   * the number of finished plugins, warnings produced so far (with plugin
+   * source, position, and order preserved), and—on failure—safe error fields.
+   * It never exposes the AST, and mutating it does not affect the run.
+   *
+   * @return Snapshot of the current processing stage.
+   */
+  snapshot(): LazyResult.ProcessingSnapshot
 
   /**
    * Run plugin in sync way and return `Result`.

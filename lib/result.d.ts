@@ -39,6 +39,70 @@ declare namespace Result {
     plugin?: string
   }
 
+  /**
+   * A detached, plain-object copy of a single warning
+   * inside a `Result#snapshot()` or `LazyResult#snapshot()` snapshot.
+   *
+   * Position fields are `null` when the warning has no source position,
+   * so an absent position is explicit rather than `undefined`.
+   */
+  export interface WarningSnapshot {
+    /**
+     * Column in the source file where the warning was raised,
+     * or `null` if the warning has no position.
+     */
+    column: number | null
+
+    /**
+     * Column where the warning range ends, or `null` if unknown.
+     */
+    endColumn: number | null
+
+    /**
+     * Line where the warning range ends, or `null` if unknown.
+     */
+    endLine: number | null
+
+    /**
+     * Line in the source file where the warning was raised,
+     * or `null` if the warning has no position.
+     */
+    line: number | null
+
+    /**
+     * Name of the plugin that created the warning,
+     * or `null` if it is not known.
+     */
+    plugin: string | null
+
+    /**
+     * Warning message.
+     */
+    text: string
+  }
+
+  /**
+   * A point-in-time view of a finished `Result`. The object and all nested
+   * containers are fresh copies: mutating them does not affect the `Result`.
+   */
+  export interface ResultSnapshot {
+    /**
+     * Always `null` on a `Result` snapshot, since a `Result`
+     * represents a completed transformation.
+     */
+    error: null
+
+    /**
+     * A standalone `Result` is always a completed one.
+     */
+    state: 'succeeded'
+
+    /**
+     * Warnings produced by plugins, in the order they were added.
+     */
+    warnings: WarningSnapshot[]
+  }
+
   export { Result_ as default }
 }
 
@@ -157,6 +221,24 @@ declare class Result_<RootNode = Document | Root> {
    * @param opts      Options from the `Processor#process` or `Root#toResult`.
    */
   constructor(processor: Processor, root: RootNode, opts: Result.ResultOptions)
+
+  /**
+   * Returns a detached snapshot of this result: its state (`'succeeded'`),
+   * and the warnings produced so far with plugin source, position,
+   * and original order preserved.
+   *
+   * The returned object contains only plain data. It never exposes
+   * the AST, and mutating it does not affect this `Result`.
+   *
+   * ```js
+   * result.snapshot().warnings.forEach(warning => {
+   *   console.log(warning.plugin, warning.line, warning.text)
+   * })
+   * ```
+   *
+   * @return Snapshot with state and warnings.
+   */
+  snapshot(): Result.ResultSnapshot
 
   /**
    * Returns for `Result#css` content.

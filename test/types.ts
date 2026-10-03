@@ -62,3 +62,27 @@ function parentCanNarrowType(): never | void {
 parentCanNarrowType()
 
 export default plugin
+
+// Snapshot API keeps a detached, typed view of a run
+let lazySnapshot = postcss([plugin('color')]).process('a{}', {
+  from: undefined
+})
+let processing = lazySnapshot.snapshot()
+if (processing.state === 'failed') {
+  console.log(processing.error?.name, processing.error?.message)
+}
+console.log(processing.pluginsRun, processing.pluginsTotal)
+for (let warning of processing.warnings) {
+  let line: number | null = warning.line
+  let pluginName: string | null = warning.plugin
+  console.log(line, pluginName, warning.text)
+}
+
+postcss()
+  .process('a{}', { from: undefined })
+  .then(result => {
+    let resultSnapshot = result.snapshot()
+    if (resultSnapshot.state === 'succeeded') {
+      console.log(resultSnapshot.warnings.length)
+    }
+  })
