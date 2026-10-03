@@ -53,6 +53,7 @@
     "./lib/container": "./lib/container.js",
     "./lib/css-syntax-error": "./lib/css-syntax-error.js",
     "./lib/declaration": "./lib/declaration.js",
+    "./lib/dedupe": "./lib/dedupe.js",
     "./lib/fromJSON": "./lib/fromJSON.js",
     "./lib/input": "./lib/input.js",
     "./lib/lazy-result": "./lib/lazy-result.js",
