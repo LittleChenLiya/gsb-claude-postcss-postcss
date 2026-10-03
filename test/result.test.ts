@@ -67,4 +67,39 @@ test('returns only warnings', () => {
   ])
 })
 
+test('snapshot is succeeded with warnings and no AST', () => {
+  let result = new Result(processor, root, {})
+  result.warn('watch out', { node: postcss.parse('a{}').first })
+  let snapshot = result.snapshot()
+  is(snapshot.state, 'succeeded')
+  is(snapshot.plugins, 0)
+  is(snapshot.error, null)
+  is(snapshot.warnings.length, 1)
+  is(snapshot.warnings[0].text, 'watch out')
+  is(snapshot.warnings[0].line, 1)
+  is(snapshot.warnings[0].column, 1)
+  is('node' in snapshot.warnings[0], false)
+})
+
+test('snapshot reports missing positions explicitly as null', () => {
+  let result = new Result(processor, root, {})
+  result.warn('without position')
+  let snapshot = result.snapshot()
+  is(snapshot.warnings[0].line, null)
+  is(snapshot.warnings[0].column, null)
+  is(snapshot.warnings[0].endLine, null)
+  is(snapshot.warnings[0].endColumn, null)
+  is(snapshot.warnings[0].plugin, null)
+})
+
+test('snapshot containers are detached from the result', () => {
+  let result = new Result(processor, root, {})
+  result.warn('first')
+  let a = result.snapshot()
+  let b = result.snapshot()
+  is(a.warnings !== b.warnings, true)
+  ;(a.warnings as unknown[]).push('intruder')
+  is(result.snapshot().warnings.length, 1)
+})
+
 test.run()

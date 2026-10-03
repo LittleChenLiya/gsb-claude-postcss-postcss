@@ -26,6 +26,151 @@ declare namespace Result {
     type: string
   }
 
+  /**
+   * Plain, detached snapshot of a warning produced by `Result#warn`.
+   *
+   * The snapshot keeps the warning's source, position and order, but
+   * drops the link to the AST (`node`). Missing positions and source are
+   * reported explicitly as `null`.
+   */
+  export interface WarningSnapshot {
+    [others: string]: any
+
+    /**
+     * Column for exclusive end position in the input file, or `null`
+     * when the warning has no source position.
+     */
+    column: number | null
+
+    /**
+     * Column for exclusive end position in the input file, or `null`
+     * when the warning has no source position.
+     */
+    endColumn: number | null
+
+    /**
+     * Line for exclusive end position in the input file, or `null`
+     * when the warning has no source position.
+     */
+    endLine: number | null
+
+    /**
+     * Line for inclusive start position in the input file, or `null`
+     * when the warning has no source position.
+     */
+    line: number | null
+
+    /**
+     * Name of the plugin that created the warning, or `null` when it
+     * was created without a plugin.
+     */
+    plugin: string | null
+
+    /**
+     * The warning message.
+     */
+    text: string
+
+    /**
+     * Type to filter warnings from `Result#messages`.
+     * Always equal to `"warning"`.
+     */
+    type: 'warning'
+  }
+
+  /**
+   * Plain, detached snapshot of an error thrown by a plugin.
+   *
+   * The snapshot contains only safe fields and never carries the AST
+   * or the CSS input object.
+   */
+  export interface ErrorSnapshot {
+    /**
+     * Column for the error position, or `null` when the error has no
+     * position.
+     */
+    column: number | null
+
+    /**
+     * Column for the exclusive end of the error position, or `null`
+     * when the error has no position.
+     */
+    endColumn: number | null
+
+    /**
+     * Line for the exclusive end of the error position, or `null`
+     * when the error has no position.
+     */
+    endLine: number | null
+
+    /**
+     * Path to the file that caused the error, or `null`.
+     */
+    file: string | null
+
+    /**
+     * Line for the error position, or `null` when the error has no
+     * position.
+     */
+    line: number | null
+
+    /**
+     * The error message.
+     */
+    message: string
+
+    /**
+     * The error name (e.g., `"CssSyntaxError"`).
+     */
+    name: string
+
+    /**
+     * Name of the plugin that threw the error, or `null`.
+     */
+    plugin: string | null
+
+    /**
+     * The error stack trace, or `null` when unavailable.
+     */
+    stack: string | null
+  }
+
+  /**
+   * Plain, detached snapshot of the current processing state.
+   *
+   * The snapshot never triggers or awaits processing: it only reports
+   * what is already known. It contains no AST references and no
+   * containers shared with PostCSS internals, so mutating the returned
+   * object is safe.
+   */
+  export interface Snapshot {
+    /**
+     * Safe fields of the error thrown by a plugin, or `null` when the
+     * processing has not failed.
+     */
+    error: ErrorSnapshot | null
+
+    /**
+     * Number of plugins started so far.
+     */
+    plugins: number
+
+    /**
+     * Current processing state.
+     *
+     * - `pending`: processing has not started yet
+     * - `running`: an async plugin is in flight
+     * - `succeeded`: all plugins finished without errors
+     * - `failed`: a plugin threw an error
+     */
+    state: 'failed' | 'pending' | 'running' | 'succeeded'
+
+    /**
+     * Warnings produced so far, with their source, position and order.
+     */
+    warnings: WarningSnapshot[]
+  }
+
   export interface ResultOptions extends ProcessOptions {
     /**
      * The CSS node that was the source of the warning.
@@ -197,6 +342,25 @@ declare class Result_<RootNode = Document | Root> {
    * @return Warnings from plugins.
    */
   warnings(): Warning[]
+
+  /**
+   * Returns a plain, detached snapshot of the current processing state.
+   *
+   * The snapshot never triggers or awaits processing: it only reports
+   * what is already known. It contains no AST references and no
+   * containers shared with PostCSS internals, so mutating the returned
+   * object is safe.
+   *
+   * ```js
+   * const snapshot = result.snapshot()
+   * if (snapshot.state === 'succeeded') {
+   *   console.log(snapshot.warnings.length)
+   * }
+   * ```
+   *
+   * @return Snapshot with `state`, `plugins`, `warnings` and `error`.
+   */
+  snapshot(): Result.Snapshot
 }
 
 declare class Result<RootNode = Document | Root> extends Result_<RootNode> {}

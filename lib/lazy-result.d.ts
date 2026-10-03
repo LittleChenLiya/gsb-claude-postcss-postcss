@@ -1,6 +1,7 @@
 import Document from './document.js'
 import { SourceMap } from './postcss.js'
 import Processor from './processor.js'
+import { Snapshot } from './result.js'
 import Result, { Message, ResultOptions } from './result.js'
 import Root from './root.js'
 import Warning from './warning.js'
@@ -180,6 +181,28 @@ declare class LazyResult_<RootNode = Document | Root> implements PromiseLike<
    * @return Warnings from plugins.
    */
   warnings(): Warning[]
+
+  /**
+   * Returns a plain, detached snapshot of the current processing state.
+   *
+   * Unlike `then()` or `warnings()`, this method never starts the
+   * processing of a pending `LazyResult`, never awaits a plugin that is
+   * already running and never calls a plugin again. It only reports the
+   * state observed so far:
+   *
+   * - `pending`: processing has not started yet
+   * - `running`: an async plugin is in flight
+   * - `succeeded`: all plugins finished without errors
+   * - `failed`: a plugin threw an error
+   *
+   * ```js
+   * const lazy = postcss([plugin]).process(css)
+   * lazy.snapshot().state //=> 'pending'
+   * ```
+   *
+   * @return Snapshot with `state`, `plugins`, `warnings` and `error`.
+   */
+  snapshot(): Snapshot
 }
 
 declare class LazyResult<

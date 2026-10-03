@@ -395,6 +395,29 @@ All PostCSS runners should pass [PostCSS Runner Guidelines].
 [PostCSS Runner Guidelines]: https://github.com/postcss/postcss/blob/main/docs/guidelines/runner.md
 [PostCSS API documentation]: https://postcss.org/api/
 
+### Observing Processing
+
+Build tools and runners can observe an in-flight transformation with
+the `snapshot()` method on `LazyResult` and `Result`. It returns a plain,
+detached object with the current state (`pending`, `running`,
+`succeeded` or `failed`), the number of plugins started, the warnings
+produced so far and safe error fields. Calling `snapshot()` never
+starts, awaits or re-triggers processing.
+
+```js
+let lazy = postcss([plugin]).process(css, { from: undefined })
+
+lazy.snapshot().state //=> 'pending'
+
+lazy.then(() => {
+  lazy.snapshot().state //=> 'succeeded'
+})
+```
+
+See the [processing snapshots] documentation for the full shape.
+
+[processing snapshots]: https://github.com/postcss/postcss/blob/main/docs/snapshots.md
+
 ### Options
 
 Most PostCSS runners accept two parameters:

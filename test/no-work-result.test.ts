@@ -180,4 +180,13 @@ test('no work result matches lazy result when map is true and the source contain
   equal(noWorkResult.css, lazyResult.css)
 })
 
+test('snapshot is succeeded with no plugins and no warnings', () => {
+  let result = postcss([]).process('a {}', { from: undefined })
+  let snapshot = result.snapshot()
+  is(snapshot.state, 'succeeded')
+  is(snapshot.plugins, 0)
+  equal(snapshot.warnings, [])
+  is(snapshot.error, null)
+})
+
 test.run()

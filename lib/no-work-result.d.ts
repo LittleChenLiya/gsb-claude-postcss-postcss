@@ -1,7 +1,7 @@
 import LazyResult from './lazy-result.js'
 import { SourceMap } from './postcss.js'
 import Processor from './processor.js'
-import Result, { Message, ResultOptions } from './result.js'
+import Result, { Message, ResultOptions, Snapshot } from './result.js'
 import Root from './root.js'
 import Warning from './warning.js'
 
@@ -38,6 +38,17 @@ declare class NoWorkResult_ implements LazyResult<Root> {
   sync(): Result<Root>
   toString(): string
   warnings(): Warning[]
+
+  /**
+   * Returns a plain, detached snapshot of the current processing state.
+   *
+   * A `NoWorkResult` has no plugins, so its snapshot is always
+   * `succeeded` (or `failed` if the CSS could not be parsed on `root`
+   * access) and contains no warnings.
+   *
+   * @return Snapshot with `state`, `plugins`, `warnings` and `error`.
+   */
+  snapshot(): Snapshot
 }
 
 declare class NoWorkResult extends NoWorkResult_ {}
