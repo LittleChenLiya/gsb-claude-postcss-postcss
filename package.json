@@ -58,6 +58,7 @@
     "./lib/lazy-result": "./lib/lazy-result.js",
     "./lib/no-work-result": "./lib/no-work-result.js",
     "./lib/list": "./lib/list.js",
+    "./lib/value-list": "./lib/value-list.js",
     "./lib/map-generator": "./lib/map-generator.js",
     "./lib/node": "./lib/node.js",
     "./lib/parse": "./lib/parse.js",
@@ -78,6 +79,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
+    "demo:value-list": "node examples/value-list.js",
     "test:lint": "eslint .",
     "test:types": "check-dts",
     "test:version": "node ./test/version.js",

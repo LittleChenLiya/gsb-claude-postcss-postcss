@@ -9,6 +9,7 @@ import Document, { DocumentProps } from './document.js'
 import Input, { FilePosition } from './input.js'
 import LazyResult from './lazy-result.js'
 import list from './list.js'
+import * as valueList from './value-list.js'
 import Node, {
   AnyNode,
   ChildNode,
@@ -169,6 +170,7 @@ declare namespace postcss {
     Input,
     LazyResult,
     list,
+    valueList,
     Message,
     NewChild,
     Node,
