@@ -1,0 +1,6 @@
+@media screen {
+  .button { color: red; }
+}
+@media print {
+  .button { color: black; }
+}

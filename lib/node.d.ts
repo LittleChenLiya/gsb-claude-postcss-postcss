@@ -509,6 +509,28 @@ declare abstract class Node_ {
   toJSON(): object
 
   /**
+   * Precheck a move without performing it. Compares the old and new
+   * parent at-rule chains and reports whether the move changes the media,
+   * supports, or layer context. The node is never modified.
+   *
+   * ```js
+   * const report = rule.moveCheck(mediaB)
+   * if (!report.safe) {
+   *   console.log(report.risks)
+   * }
+   * ```
+   *
+   * @param target The new parent container, or a child node to insert
+   *   before/after.
+   * @param opts Positioning options.
+   * @return The move report.
+   */
+  moveCheck(
+    target: Node | Node.ChildProps | readonly Node[] | string | undefined,
+    opts?: object
+  ): import('./move-check.js').Report
+
+  /**
    * It compiles the node to browser readable cascading style sheets string
    * depending on it's type.
    *

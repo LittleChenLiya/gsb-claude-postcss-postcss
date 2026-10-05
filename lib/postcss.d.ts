@@ -9,6 +9,7 @@ import Document, { DocumentProps } from './document.js'
 import Input, { FilePosition } from './input.js'
 import LazyResult from './lazy-result.js'
 import list from './list.js'
+import moveCheck from './move-check.js'
 import Node, {
   AnyNode,
   ChildNode,
@@ -170,6 +171,7 @@ declare namespace postcss {
     LazyResult,
     list,
     Message,
+    moveCheck,
     NewChild,
     Node,
     NodeErrorOptions,
@@ -184,6 +186,15 @@ declare namespace postcss {
     Source,
     Warning,
     WarningOptions
+  }
+
+  export namespace moveCheck {
+    export type ContextDescriptor = moveCheck.ContextDescriptor
+    export type Location = moveCheck.Location
+    export type Options = moveCheck.Options
+    export type Plan = moveCheck.Plan
+    export type Report = moveCheck.Report
+    export type Risk = moveCheck.Risk
   }
 
   export type SourceMap = {
@@ -439,6 +450,31 @@ declare namespace postcss {
    * @return New document node.
    */
   export function document(defaults?: DocumentProps): Document
+
+  /**
+   * Precheck a rule move without performing it. Compares the old and new
+   * parent at-rule chains and reports whether the move changes the media,
+   * supports, or layer context. Returns a plan plus risks; the node is
+   * never modified.
+   *
+   * ```js
+   * const report = postcss.moveCheck(rule, mediaB)
+   * if (!report.safe) {
+   *   console.log(report.risks)
+   * }
+   * ```
+   *
+   * @param node The node to move.
+   * @param target The new parent container, or a child node to insert
+   *   before/after.
+   * @param opts Positioning options.
+   * @return The move report.
+   */
+  export function moveCheck(
+    node: Node,
+    target: Node,
+    opts?: moveCheck.Options
+  ): moveCheck.Report
 
   export { postcss as default }
 }

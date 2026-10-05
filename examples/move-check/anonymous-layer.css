@@ -1,0 +1,6 @@
+@layer {
+  .button { color: red; }
+}
+@layer {
+  .button { color: blue; }
+}
