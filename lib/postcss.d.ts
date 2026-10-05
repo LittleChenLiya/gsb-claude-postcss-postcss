@@ -9,6 +9,7 @@ import Document, { DocumentProps } from './document.js'
 import Input, { FilePosition } from './input.js'
 import LazyResult from './lazy-result.js'
 import list from './list.js'
+import movePreflight from './move-preflight.js'
 import Node, {
   AnyNode,
   ChildNode,
@@ -170,6 +171,7 @@ declare namespace postcss {
     LazyResult,
     list,
     Message,
+    movePreflight,
     NewChild,
     Node,
     NodeErrorOptions,

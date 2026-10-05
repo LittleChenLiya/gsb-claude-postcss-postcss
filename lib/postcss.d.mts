@@ -31,6 +31,7 @@ export {
   type LazyResult,
   list,
   Message,
+  movePreflight,
   Node,
   NodeErrorOptions,
   NodeProps,
