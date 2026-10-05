@@ -53,6 +53,7 @@
     "./lib/container": "./lib/container.js",
     "./lib/css-syntax-error": "./lib/css-syntax-error.js",
     "./lib/declaration": "./lib/declaration.js",
+    "./lib/extract-declarations": "./lib/extract-declarations.js",
     "./lib/fromJSON": "./lib/fromJSON.js",
     "./lib/input": "./lib/input.js",
     "./lib/lazy-result": "./lib/lazy-result.js",
@@ -84,6 +85,7 @@
     "test:coverage": "c8 pnpm unit",
     "test:integration": "node ./test/integration.js",
     "test:size": "size-limit",
+    "demo:extract": "node ./scripts/extract-declarations-demo.js",
     "test": "FORCE_COLOR=1 pnpm run /^test:/",
     "unit": "uvu -r ts-node/register/transpile-only test \"\\.test\\.(ts|js)$\"",
     "old": "node --require ./test/old-node.js ./node_modules/uvu/bin.js -r module test \"\\.test\\.(ts|js)$\""
