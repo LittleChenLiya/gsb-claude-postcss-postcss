@@ -2,6 +2,11 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+- Added `Root#positionIndex` to find the innermost node (with its parent
+  chain) by UTF-8 byte offset in the source.
+
 ## 8.5.28
 
 - Fixes types regression.

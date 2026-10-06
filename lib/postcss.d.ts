@@ -18,6 +18,7 @@ import Node, {
   Position,
   Source
 } from './node.js'
+import PositionIndex from './position-index.js'
 import Processor from './processor.js'
 import Result, { Message } from './result.js'
 import Root, { RootProps } from './root.js'
@@ -175,6 +176,7 @@ declare namespace postcss {
     NodeErrorOptions,
     NodeProps,
     Position,
+    PositionIndex,
     Processor,
     Result,
     Root,

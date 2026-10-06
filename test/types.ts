@@ -62,3 +62,17 @@ function parentCanNarrowType(): never | void {
 parentCanNarrowType()
 
 export default plugin
+
+function positionIndexCanBeQueried(): void {
+  let root = postcss.parse('a{color:black}')
+  let index = root.positionIndex
+  if (index.stale) return
+  let match = index.find(3)
+  if (!match) return
+  let nodeType: string = match.node.type
+  let parents: number = match.parents.length
+  let range: [number, number] = [match.start, match.end]
+  let own = index.rangeOf(match.node)
+  console.log(nodeType, parents, range, own)
+}
+positionIndexCanBeQueried()

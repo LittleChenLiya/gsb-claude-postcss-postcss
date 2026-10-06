@@ -42,6 +42,7 @@ export {
   Plugin,
   PluginCreator,
   Position,
+  PositionIndex,
   Postcss,
   ProcessOptions,
   Processor,

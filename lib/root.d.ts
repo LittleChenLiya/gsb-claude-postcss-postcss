@@ -1,5 +1,6 @@
 import Container, { ContainerProps } from './container.js'
 import Document from './document.js'
+import PositionIndex from './position-index.js'
 import { ProcessOptions } from './postcss.js'
 import Result from './result.js'
 
@@ -55,6 +56,18 @@ declare namespace Root {
 declare class Root_ extends Container {
   nodes: NonNullable<Container['nodes']>
   parent: Document | undefined
+
+  /**
+   * A read-only index to find nodes by UTF-8 byte offset in the source.
+   *
+   * ```js
+   * const root = postcss.parse(css)
+   * const match = root.positionIndex.find(byteOffset)
+   * ```
+   *
+   * The index is cached and rebuilt automatically after tree mutations.
+   */
+  readonly positionIndex: PositionIndex
   raws: Root.RootRaws
   type: 'root'
 
