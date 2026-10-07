@@ -52,6 +52,7 @@
     "./lib/comment": "./lib/comment.js",
     "./lib/container": "./lib/container.js",
     "./lib/css-syntax-error": "./lib/css-syntax-error.js",
+    "./lib/custom-properties": "./lib/custom-properties.js",
     "./lib/declaration": "./lib/declaration.js",
     "./lib/fromJSON": "./lib/fromJSON.js",
     "./lib/input": "./lib/input.js",

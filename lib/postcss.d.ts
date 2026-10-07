@@ -4,6 +4,7 @@ import AtRule, { AtRuleProps } from './at-rule.js'
 import Comment, { CommentProps } from './comment.js'
 import Container, { ContainerProps, NewChild } from './container.js'
 import CssSyntaxError from './css-syntax-error.js'
+import analyzeCustomProperties from './custom-properties.js'
 import Declaration, { DeclarationProps } from './declaration.js'
 import Document, { DocumentProps } from './document.js'
 import Input, { FilePosition } from './input.js'
@@ -151,6 +152,7 @@ interface Processors {
 
 declare namespace postcss {
   export {
+    analyzeCustomProperties,
     AnyNode,
     AtRule,
     AtRuleProps,

@@ -1,6 +1,7 @@
 export {
   // Type-only exports
   AcceptedPlugin,
+  analyzeCustomProperties,
   AnyNode,
   atRule,
   AtRule,
