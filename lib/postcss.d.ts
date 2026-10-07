@@ -22,6 +22,7 @@ import Processor from './processor.js'
 import Result, { Message } from './result.js'
 import Root, { RootProps } from './root.js'
 import Rule, { RuleProps } from './rule.js'
+import Transaction from './transaction.js'
 import Warning, { WarningOptions } from './warning.js'
 
 type DocumentProcessor = (
@@ -182,6 +183,7 @@ declare namespace postcss {
     Rule,
     RuleProps,
     Source,
+    Transaction,
     Warning,
     WarningOptions
   }
@@ -439,6 +441,20 @@ declare namespace postcss {
    * @return New document node.
    */
   export function document(defaults?: DocumentProps): Document
+
+  /**
+   * Starts an explicit edit transaction on the given root.
+   *
+   * ```js
+   * const tx = postcss.transaction(root)
+   * tx.insertAfter(decl, decl.clone({ prop: 'background' }))
+   * tx.commit()
+   * ```
+   *
+   * @param root Root node to edit.
+   * @return New transaction recording edits for the root.
+   */
+  export function transaction(root: Root): Transaction
 
   export { postcss as default }
 }

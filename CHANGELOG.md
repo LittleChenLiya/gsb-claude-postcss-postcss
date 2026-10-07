@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+- Added explicit edit transactions with `Root#transaction()` and `postcss.transaction()`.
+
 ## 8.5.28
 
 - Fixes types regression.

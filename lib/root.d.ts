@@ -2,6 +2,7 @@ import Container, { ContainerProps } from './container.js'
 import Document from './document.js'
 import { ProcessOptions } from './postcss.js'
 import Result from './result.js'
+import Transaction from './transaction.js'
 
 declare namespace Root {
   export interface RootRaws extends Record<string, any> {
@@ -79,6 +80,19 @@ declare class Root_ extends Container {
    * @return Result with current root’s CSS.
    */
   toResult(options?: ProcessOptions): Result
+
+  /**
+   * Starts an explicit edit transaction on this root.
+   *
+   * ```js
+   * const tx = root.transaction()
+   * tx.replace(decl, decl.clone({ value: 'white' }))
+   * tx.commit()
+   * ```
+   *
+   * @return New transaction recording edits for this root.
+   */
+  transaction(): Transaction
 }
 
 declare class Root extends Root_ {}

@@ -59,6 +59,8 @@ export {
   // Value exports from postcss.mjs
   stringify,
   Syntax,
+  transaction,
+  Transaction,
   TransformCallback,
   Transformer,
   Warning,
