@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+- Added explicit edit transactions via `Root#transaction()`: record `replace`/`insertBefore`/`insertAfter`/`remove` edits without touching the tree, then validate (targets still belong to the root, no conflicting edits, no cross-root moves) and apply them all at once with `commit()`, or discard them with `rollback()`.
+
 ## 8.5.28
 
 - Fixes types regression.

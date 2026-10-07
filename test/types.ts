@@ -62,3 +62,16 @@ function parentCanNarrowType(): never | void {
 parentCanNarrowType()
 
 export default plugin
+
+function transactionTypes(root: postcss.Root): postcss.Root {
+  let tx = root.transaction()
+  let decl = postcss.decl({ prop: 'color', value: 'red' })
+  tx.insertBefore(decl, decl.clone())
+    .insertAfter(decl, [decl.clone()])
+    .replace(decl, decl.clone({ value: 'blue' }))
+    .remove(decl)
+  if (tx.status === 'active') tx.rollback()
+  let committed: postcss.Root = tx.commit()
+  return committed
+}
+transactionTypes(postcss.root())

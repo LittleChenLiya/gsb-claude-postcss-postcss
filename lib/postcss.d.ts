@@ -22,6 +22,7 @@ import Processor from './processor.js'
 import Result, { Message } from './result.js'
 import Root, { RootProps } from './root.js'
 import Rule, { RuleProps } from './rule.js'
+import Transaction from './transaction.js'
 import Warning, { WarningOptions } from './warning.js'
 
 type DocumentProcessor = (
@@ -182,6 +183,7 @@ declare namespace postcss {
     Rule,
     RuleProps,
     Source,
+    Transaction,
     Warning,
     WarningOptions
   }

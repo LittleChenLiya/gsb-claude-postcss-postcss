@@ -2,6 +2,7 @@ import Container, { ContainerProps } from './container.js'
 import Document from './document.js'
 import { ProcessOptions } from './postcss.js'
 import Result from './result.js'
+import Transaction from './transaction.js'
 
 declare namespace Root {
   export interface RootRaws extends Record<string, any> {
@@ -79,6 +80,24 @@ declare class Root_ extends Container {
    * @return Result with current root’s CSS.
    */
   toResult(options?: ProcessOptions): Result
+
+  /**
+   * Starts an explicit edit transaction bound to this root.
+   *
+   * ```js
+   * let tx = root.transaction()
+   * tx.replace(decl, decl.clone({ value: 'var(--color)' }))
+   * tx.insertBefore(decl, postcss.decl({ prop: 'color', value: 'red' }))
+   * tx.commit()
+   * ```
+   *
+   * Edits are only recorded until `commit()` validates them (targets
+   * still belong to this root and do not conflict) and applies them
+   * together. `rollback()` or a failed commit leaves the tree untouched.
+   *
+   * @return New transaction bound to this root.
+   */
+  transaction(): Transaction
 }
 
 declare class Root extends Root_ {}
