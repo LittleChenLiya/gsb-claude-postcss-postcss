@@ -1,5 +1,6 @@
 import Container, { ContainerProps } from './container.js'
 import Document from './document.js'
+import PositionIndex from './position-index.js'
 import { ProcessOptions } from './postcss.js'
 import Result from './result.js'
 
@@ -55,15 +56,43 @@ declare namespace Root {
 declare class Root_ extends Container {
   nodes: NonNullable<Container['nodes']>
   parent: Document | undefined
+  /**
+   * Cached {@link PositionIndex}. It is created lazily and rebuilt
+   * automatically whenever the tree was modified through the Container
+   * API.
+   */
+  readonly positionIndex: PositionIndex
   raws: Root.RootRaws
+
   type: 'root'
 
   constructor(defaults?: Root.RootProps)
-
   assign(overrides: object | Root.RootProps): this
   clone(overrides?: Partial<Root.RootProps>): this
   cloneAfter(overrides?: Partial<Root.RootProps>): this
+
   cloneBefore(overrides?: Partial<Root.RootProps>): this
+
+  /**
+   * Creates a read-only index that maps a UTF-8 byte position in the
+   * source CSS to the innermost node covering it and its parent chain.
+   *
+   * The returned index is a snapshot: structural changes performed
+   * through the Container API mark it stale (see
+   * {@link PositionIndex.stale}); call {@link PositionIndex.rebuild} to
+   * refresh it.
+   *
+   * ```js
+   * const index = root.createPositionIndex()
+   * const match = index.find(byteOffset)
+   * match.node     // innermost node
+   * match.parents  // root-first parent chain
+   * match.range    // [start, end) UTF-8 bytes
+   * ```
+   *
+   * @return New position index for this root.
+   */
+  createPositionIndex(): PositionIndex
 
   /**
    * Returns a `Result` instance representing the root’s CSS.

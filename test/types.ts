@@ -1,4 +1,4 @@
-import postcss, { Document, PluginCreator } from '../lib/postcss.js'
+import postcss, { Container, Document, PluginCreator } from '../lib/postcss.js'
 import { RootRaws } from '../lib/root.js'
 
 const plugin: PluginCreator<string> = prop => {
@@ -62,3 +62,34 @@ function parentCanNarrowType(): never | void {
 parentCanNarrowType()
 
 export default plugin
+
+// PositionIndex type checks
+{
+  let typedRoot = postcss.parse('a { color: red }')
+  let index = typedRoot.createPositionIndex()
+  index.stale
+  let rebuilt: typeof index = index.rebuild()
+  index.release()
+  let cached = typedRoot.positionIndex
+  rebuilt
+  cached
+
+  let match = index.find(0)
+  if (match) {
+    let node = match.node
+    let start: number = match.start
+    let end: number = match.end
+    let range: [number, number] = match.range
+    let parents = match.parents.map((parent: Container) => parent.type)
+    node
+    start
+    end
+    range
+    parents
+  }
+
+  import('../lib/postcss.js').then(({ PositionIndex }) => {
+    let byClass: typeof index = new PositionIndex(typedRoot)
+    byClass.find(0, typedRoot.source!.input)
+  })
+}
